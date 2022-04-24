@@ -10,4 +10,7 @@ migrateup:
 migratedown:
 	migrate -path ./db/migration -database "postgresql://postgres:test1234@localhost:5432/smart_bank?sslmode=disable" --verbose down
 
-.PHONY: createdb dropdb migrateup migratedown
+sqlc:
+	sqlc generate
+
+.PHONY: createdb dropdb migrateup migratedown sqlc
