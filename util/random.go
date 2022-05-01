@@ -30,6 +30,10 @@ func RandomName() string {
 	return RandomString(10)
 }
 
+func RandomID() int64 {
+	return RandomInt(1, 100)
+}
+
 func RandomMoney() int64 {
 	return RandomInt(1, 1000)
 }
