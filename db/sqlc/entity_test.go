@@ -12,8 +12,8 @@ import (
 
 func CreateRandomEntry(t *testing.T) Entry {
 	arg := CreateEntryParams{
-		AccountID:		util.RandomID(),
-		Amount:				util.RandomMoney(),
+		AccountID: 1,
+		Amount:    util.RandomMoney(),
 	}
 
 	entry, err := testQueries.CreateEntry(context.Background(), arg)
@@ -50,11 +50,13 @@ func TestUpdateEntry(t *testing.T) {
 	entry1 := CreateRandomEntry(t)
 
 	arg := UpdateEntryParams{
-		ID:												entry1.ID,
-		Amount:										util.RandomMoney(),
+		ID:     entry1.ID,
+		Amount: util.RandomMoney(),
 	}
 
-	entry2, err := testQueries.UpdateEntry(context.Background(), arg)
+	err := testQueries.UpdateEntry(context.Background(), arg)
+	entry2, err := testQueries.GetEntry(context.Background(), entry1.ID)
+
 	require.NoError(t, err)
 	require.NotEmpty(t, entry2)
 
@@ -91,10 +93,8 @@ func TestListEntries(t *testing.T) {
 	require.NotEmpty(t, entries)
 	require.Len(t, entries, 10)
 
-	for i := 0; i < 10; i++ {
-		require.Equal(t, entries[i].ID, int64(i+1))
-		require.Equal(t, entries[i].AccountID, int64(1))
-		require.Equal(t, entries[i].Amount, int64(i+1)*100)
-		require.WithinDuration(t, time.Now(), entries[i].CreatedAt, 1*time.Second)
+	for _, entry := range entries {
+		require.NotEmpty(t, entry)
+		require.NotZero(t, entry.ID)
 	}
 }
