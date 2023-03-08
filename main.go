@@ -7,16 +7,13 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/mattchw/smart-bank/api"
 	db "github.com/mattchw/smart-bank/db/sqlc"
-)
-
-const (
-	dbDriver      = "postgres"
-	dbSource      = "postgres://postgres:test1234@localhost:5432/smart_bank?sslmode=disable"
-	serverAddress = "localhost:8080"
+	"github.com/mattchw/smart-bank/util"
 )
 
 func main() {
-	conn, err := sql.Open(dbDriver, dbSource)
+	config, err := util.LoadConfig(".")
+
+	conn, err := sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("Fail to connect to database:", err)
 	}
@@ -24,7 +21,7 @@ func main() {
 	store := db.NewStore(conn)
 	server := api.NewServer(store)
 
-	err = server.Start(serverAddress)
+	err = server.Start(config.ServerAddress)
 	if err != nil {
 		log.Fatal("Fail to start server:", err)
 	}
