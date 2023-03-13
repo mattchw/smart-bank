@@ -10,7 +10,7 @@ import (
 
 type createAccountRequest struct {
 	Name     string `json:"name" binding:"required"`
-	Currency string `json:"currency" binding:"required,oneof=USD EUR CAD"`
+	Currency string `json:"currency" binding:"required,currency"`
 }
 
 func (s *Server) createAccount(ctx *gin.Context) {
