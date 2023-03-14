@@ -30,6 +30,10 @@ func RandomName() string {
 	return RandomString(10)
 }
 
+func RandomEmail() string {
+	return RandomString(10) + "@gmail.com"
+}
+
 func RandomID() int64 {
 	return RandomInt(1, 100)
 }
