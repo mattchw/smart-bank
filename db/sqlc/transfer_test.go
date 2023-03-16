@@ -58,11 +58,12 @@ func TestUpdateTransfer(t *testing.T) {
 	arg := UpdateTransferParams{
 		ID:            transfer1.ID,
 		Amount:        util.RandomMoney(),
-		FromAccountID: 1,
-		ToAccountID:   2,
+		FromAccountID: transfer1.FromAccountID,
+		ToAccountID:   transfer1.ToAccountID,
 	}
 
 	err := testQueries.UpdateTransfer(context.Background(), arg)
+	require.NoError(t, err)
 	transfer2, err := testQueries.GetTransfer(context.Background(), transfer1.ID)
 
 	require.NoError(t, err)
