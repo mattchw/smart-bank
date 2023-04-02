@@ -1,8 +1,9 @@
 package token_interfaces
 
 import (
-	"errors"
 	"time"
+
+	"github.com/mattchw/smart-bank/errors"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
@@ -33,7 +34,7 @@ func NewClaim(username string, duration time.Duration) (*Claim, error) {
 
 func (c *Claim) Validate() error {
 	if time.Now().After(c.ExpiredAt) {
-		return errors.New("token expired")
+		return errors.ErrExpiredToken
 	}
 	return nil
 }

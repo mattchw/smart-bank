@@ -28,12 +28,18 @@ func (j *JWTMaker) CreateToken(username string, duration time.Duration) (string,
 		return "", err
 	}
 
-	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, &jwt.RegisteredClaims{
-		ExpiresAt: jwt.NewNumericDate(payload.ExpiredAt),
-		IssuedAt:  jwt.NewNumericDate(payload.IssuedAt),
-		Issuer:    payload.Username,
-		Subject:   payload.ID.String(),
-	})
+	claims := token_interfaces.Claim{
+		payload.ID,
+		payload.Username,
+		payload.IssuedAt,
+		payload.ExpiredAt,
+		jwt.RegisteredClaims{
+			Issuer:    "smart-bank",
+			ExpiresAt: jwt.NewNumericDate(payload.ExpiredAt),
+		},
+	}
+
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return jwtToken.SignedString([]byte(j.secretKey))
 }
 
@@ -45,13 +51,13 @@ func (j *JWTMaker) VerifyToken(token string) (*token_interfaces.Claim, error) {
 		}
 		return []byte(j.secretKey), nil
 	}
-	jwtToken, err := jwt.ParseWithClaims(token, &jwt.RegisteredClaims{}, keyFunc)
+	jwtToken, err := jwt.ParseWithClaims(token, &token_interfaces.Claim{}, keyFunc)
 	if err != nil {
 		return nil, err
 	}
 
 	payload, ok := jwtToken.Claims.(*token_interfaces.Claim)
-	if !ok {
+	if !ok && !jwtToken.Valid {
 		return nil, errors.ErrInvalidToken
 	}
 
