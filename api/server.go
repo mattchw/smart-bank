@@ -53,3 +53,7 @@ func (server *Server) initRoutes() {
 
 	server.router = router
 }
+
+func (s *Server) Start(address string) error {
+	return s.router.Run(address)
+}

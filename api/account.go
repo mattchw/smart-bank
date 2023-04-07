@@ -105,7 +105,3 @@ func (s *Server) listAccounts(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, accounts)
 }
-
-func (s *Server) Start(address string) error {
-	return s.router.Run(address)
-}
