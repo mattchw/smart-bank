@@ -11,7 +11,8 @@ WORKDIR /app
 COPY --from=builder /app/main .
 COPY --from=builder /app/migrate ./migrate
 
-COPY .env ./
+# use wildcard to copy .env or .env.example
+COPY .env* ./.env
 
 COPY scripts/start.sh .
 COPY scripts/wait-for.sh .
